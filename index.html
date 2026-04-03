@@ -252,6 +252,106 @@
     color: #6B5B45; line-height: 2; margin-bottom: 8px;
   }
 
+  /* ===================== COUNTDOWN SECTION ===================== */
+  .countdown-section {
+    padding: 100px 24px;
+    background: linear-gradient(180deg, #2C2419 0%, #3A3025 60%, #2C2419 100%);
+    position: relative; overflow: hidden; text-align: center;
+  }
+  .countdown-section::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 50%, rgba(212,175,55,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .countdown-bg-line {
+    position: absolute; left: 50%; top: 0; bottom: 0; width: 1px;
+    background: linear-gradient(180deg, transparent, rgba(212,175,55,0.15), transparent);
+    transform: translateX(-50%);
+  }
+
+  .countdown-eyebrow {
+    font-family: var(--si-sans); font-size: 11px; font-weight: 400;
+    letter-spacing: 3px; color: var(--gold); margin-bottom: 16px; opacity: 0.8;
+  }
+  .countdown-heading {
+    font-family: var(--si-serif); font-size: clamp(18px, 3.5vw, 26px);
+    font-weight: 400; color: rgba(253,250,244,0.9); margin-bottom: 52px; line-height: 1.5;
+  }
+
+  .countdown-grid {
+    display: flex; justify-content: center; align-items: center;
+    gap: 8px; flex-wrap: wrap; margin-bottom: 48px; position: relative; z-index: 2;
+  }
+
+  .countdown-unit {
+    display: flex; flex-direction: column; align-items: center;
+    min-width: 100px;
+  }
+  .countdown-box {
+    width: 96px; height: 96px;
+    background: rgba(253,250,244,0.04);
+    border: 1px solid rgba(212,175,55,0.25);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+    transition: border-color 0.4s ease;
+  }
+  .countdown-box::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212,175,55,0.6), transparent);
+  }
+  .countdown-box::after {
+    content: ''; position: absolute;
+    top: 50%; left: 0; right: 0; height: 1px;
+    background: rgba(0,0,0,0.25);
+  }
+  .countdown-number {
+    font-family: 'Cinzel', serif; font-size: 42px; font-weight: 400;
+    color: var(--gold); line-height: 1;
+    text-shadow: 0 0 30px rgba(212,175,55,0.3);
+    position: relative; z-index: 1;
+    transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .countdown-number.tick {
+    animation: numberTick 0.3s cubic-bezier(0.34,1.2,0.64,1);
+  }
+  @keyframes numberTick {
+    0% { transform: translateY(-8px); opacity: 0.4; }
+    100% { transform: translateY(0); opacity: 1; }
+  }
+  .countdown-label {
+    font-family: var(--si-sans); font-size: 10px; font-weight: 400;
+    letter-spacing: 2px; color: rgba(212,175,55,0.55);
+    margin-top: 12px; text-transform: uppercase;
+  }
+  .countdown-label-si {
+    font-family: var(--si-sans); font-size: 10px; font-weight: 300;
+    letter-spacing: 0.5px; color: rgba(212,175,55,0.35);
+    margin-top: 4px;
+  }
+
+  .countdown-sep {
+    font-family: 'Cinzel', serif; font-size: 36px; font-weight: 300;
+    color: rgba(212,175,55,0.3); margin-bottom: 40px; line-height: 1;
+    animation: sepBlink 2s ease-in-out infinite;
+  }
+  @keyframes sepBlink { 0%,100% { opacity: 0.3; } 50% { opacity: 0.7; } }
+
+  .countdown-footer-line {
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+    margin-top: 12px;
+  }
+  .cf-line { height: 1px; width: 50px; background: rgba(212,175,55,0.25); }
+  .cf-text {
+    font-family: var(--si-serif); font-size: 13px; font-weight: 300;
+    color: rgba(212,175,55,0.5); letter-spacing: 1px;
+  }
+  .countdown-done {
+    font-family: var(--si-serif); font-size: 22px; color: var(--gold);
+    padding: 20px 0; display: none;
+  }
+
   /* SCROLL SECTION */
   .scroll-section {
     padding: 120px 24px;
@@ -482,6 +582,10 @@
     .invitation-card { padding: 40px 24px; }
     .modal { padding: 40px 24px; }
     .detail-card { padding: 28px 20px; }
+    .countdown-box { width: 72px; height: 72px; }
+    .countdown-number { font-size: 30px; }
+    .countdown-unit { min-width: 72px; }
+    .countdown-sep { font-size: 24px; }
   }
 </style>
 </head>
@@ -565,6 +669,70 @@
       </div>
       <div class="shimmer-line"></div>
       <div class="card-announce" style="color:#8A7A65">2025 ජුනි මස 14 වන සෙනසුරාදා</div>
+    </div>
+  </section>
+
+  <!-- ===================== COUNTDOWN CLOCK ===================== -->
+  <section class="countdown-section">
+    <div class="countdown-bg-line"></div>
+
+    <div class="countdown-eyebrow animate-in">· විශේෂ දිනය ·</div>
+    <div class="countdown-heading animate-in" style="transition-delay:0.1s">
+      ඒ සුන්දර මොහොත දක්වා ඉතිරිව ඇත්තේ...
+    </div>
+
+    <div class="countdown-grid animate-in" style="transition-delay:0.2s" id="countdown-grid">
+      <!-- Days -->
+      <div class="countdown-unit">
+        <div class="countdown-box">
+          <span class="countdown-number" id="cd-days">00</span>
+        </div>
+        <div class="countdown-label">Days</div>
+        <div class="countdown-label-si">දින</div>
+      </div>
+
+      <div class="countdown-sep">:</div>
+
+      <!-- Hours -->
+      <div class="countdown-unit">
+        <div class="countdown-box">
+          <span class="countdown-number" id="cd-hours">00</span>
+        </div>
+        <div class="countdown-label">Hours</div>
+        <div class="countdown-label-si">පැය</div>
+      </div>
+
+      <div class="countdown-sep">:</div>
+
+      <!-- Minutes -->
+      <div class="countdown-unit">
+        <div class="countdown-box">
+          <span class="countdown-number" id="cd-minutes">00</span>
+        </div>
+        <div class="countdown-label">Minutes</div>
+        <div class="countdown-label-si">මිනිත්තු</div>
+      </div>
+
+      <div class="countdown-sep">:</div>
+
+      <!-- Seconds -->
+      <div class="countdown-unit">
+        <div class="countdown-box">
+          <span class="countdown-number" id="cd-seconds">00</span>
+        </div>
+        <div class="countdown-label">Seconds</div>
+        <div class="countdown-label-si">තත්පර</div>
+      </div>
+    </div>
+
+    <div class="countdown-done animate-in" id="countdown-done" style="transition-delay:0.2s">
+      🌸 සුබ වේවා! උත්සවය ආරම්භ වී ඇත · ගැබ්‍රියෙලා & බෙන්ජමින් 🌸
+    </div>
+
+    <div class="countdown-footer-line animate-in" style="transition-delay:0.35s">
+      <div class="cf-line"></div>
+      <div class="cf-text">2025 · ජුනි 14 · සවස 6:00 · විලා රෝසා</div>
+      <div class="cf-line"></div>
     </div>
   </section>
 
@@ -751,6 +919,7 @@ function openEnvelope() {
       document.getElementById('main-content').classList.add('visible');
       document.getElementById('rsvp-btn').classList.add('show');
       initScrollAnimations();
+      startCountdown();
     }, 100);
   }, 1200);
 }
@@ -761,6 +930,58 @@ function initScrollAnimations() {
     entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
   }, { threshold: 0.15 });
   document.querySelectorAll('.animate-in, .detail-card, .story-text, .leaf').forEach(el => observer.observe(el));
+}
+
+// ===================== COUNTDOWN CLOCK =====================
+function startCountdown() {
+  // Wedding: June 14, 2025 at 18:00 local time (Italy / CET = UTC+2 in summer)
+  const weddingDate = new Date('2026-06-14T18:00:00+02:00');
+
+  const elDays    = document.getElementById('cd-days');
+  const elHours   = document.getElementById('cd-hours');
+  const elMinutes = document.getElementById('cd-minutes');
+  const elSeconds = document.getElementById('cd-seconds');
+  const elDone    = document.getElementById('countdown-done');
+  const elGrid    = document.getElementById('countdown-grid');
+
+  let prevValues = { d: null, h: null, m: null, s: null };
+
+  function pad(n) { return String(Math.max(0, n)).padStart(2, '0'); }
+
+  function tick(el, val, key) {
+    if (prevValues[key] !== val) {
+      el.textContent = pad(val);
+      el.classList.remove('tick');
+      void el.offsetWidth; // reflow
+      el.classList.add('tick');
+      prevValues[key] = val;
+    }
+  }
+
+  function update() {
+    const now  = new Date();
+    const diff = weddingDate - now;
+
+    if (diff <= 0) {
+      elGrid.style.display = 'none';
+      elDone.style.display = 'block';
+      return;
+    }
+
+    const totalSec = Math.floor(diff / 1000);
+    const s = totalSec % 60;
+    const m = Math.floor(totalSec / 60) % 60;
+    const h = Math.floor(totalSec / 3600) % 24;
+    const d = Math.floor(totalSec / 86400);
+
+    tick(elDays,    d, 'd');
+    tick(elHours,   h, 'h');
+    tick(elMinutes, m, 'm');
+    tick(elSeconds, s, 's');
+  }
+
+  update();
+  setInterval(update, 1000);
 }
 
 // MODAL
